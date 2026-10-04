@@ -1,21 +1,26 @@
+import asyncio
+import logging
 from datetime import datetime
-from pytz import timezone
+
+from aiohttp import web
 from pyrogram import Client, __version__
 from pyrogram.raw.all import layer
-from config import Config
-from aiohttp import web
-from route import web_server
-import pyrogram.utils
+from pytz import timezone
 
-pyrogram.utils.MIN_CHAT_ID = -999999999999
-pyrogram.utils.MIN_CHANNEL_ID = -1009999999999
+from config import Config
+from route import web_server
+
+logging.basicConfig(
+    level=logging.INFO,
+    format="%(asctime)s - %(levelname)s - %(message)s",
+)
+logging.getLogger("pyrogram").setLevel(logging.ERROR)
 
 
 class Bot(Client):
-
     def __init__(self):
         super().__init__(
-            name="renamer",
+            name="ANIFLIX_RENAME_BOT",
             api_id=Config.API_ID,
             api_hash=Config.API_HASH,
             bot_token=Config.BOT_TOKEN,
@@ -28,30 +33,55 @@ class Bot(Client):
         await super().start()
         me = await self.get_me()
         self.mention = me.mention
-        self.username = me.username  
-        self.uptime = Config.BOT_UPTIME     
-        if Config.WEBHOOK:
-            app = web.AppRunner(await web_server())
-            await app.setup()       
-            await web.TCPSite(app, "0.0.0.0", 8080).start()     
-        print(f"{me.first_name} Is Started.....✨️")
-        for id in Config.ADMIN:
-            try: await self.send_message(Config.LOG_CHANNEL, f"**{me.first_name}  Is Started.....✨️**")                                
-            except: pass
+        self.username = me.username
+
+        app = web.AppRunner(await web_server())
+        await app.setup()
+        await web.TCPSite(app, "0.0.0.0", Config.PORT).start()
+
+        logging.info(
+            "%s started successfully | Pyrogram %s | Layer %s",
+            me.first_name,
+            __version__,
+            layer,
+        )
+
+        for admin in Config.ADMIN:
+            try:
+                await self.send_message(
+                    admin,
+                    f"**{me.first_name} started successfully.**",
+                )
+            except Exception:
+                logging.exception("Could not notify admin %s", admin)
+
         if Config.LOG_CHANNEL:
             try:
-                curr = datetime.now(timezone("Asia/Kolkata"))
-                date = curr.strftime('%d %B, %Y')
-                time = curr.strftime('%I:%M:%S %p')
-                await self.send_message(Config.LOG_CHANNEL, f"**{me.mention} Is Restarted !!**\n\n📅 Date : `{date}`\n⏰ Time : `{time}`\n🌐 Timezone : `Asia/Kolkata`\n\n🉐 Version : `v{__version__} (Layer {layer})`</b>")                                
-            except:
-                print("Please Make This Is Admin In Your Log Channel")
+                now = datetime.now(timezone("Asia/Kolkata"))
+                await self.send_message(
+                    Config.LOG_CHANNEL,
+                    f"**{me.mention} restarted successfully!**\n\n"
+                    f"📅 Date: `{now.strftime('%d %B, %Y')}`\n"
+                    f"⏰ Time: `{now.strftime('%I:%M:%S %p')}`\n"
+                    f"🌐 Timezone: `Asia/Kolkata`\n"
+                    f"🤖 Version: `v{__version__} (Layer {layer})`",
+                )
+            except Exception:
+                logging.exception("Could not send startup log")
 
-Bot().run()
+    async def stop(self, *args):
+        await super().stop()
+        logging.info("Bot stopped.")
 
 
+async def main():
+    bot = Bot()
+    await bot.start()
+    try:
+        await asyncio.Event().wait()
+    finally:
+        await bot.stop()
 
-# Jishu Developer 
-# Don't Remove Credit 🥺
-# Telegram Channel @Madflix_Bots
-# Developer @JishuDeveloper
+
+if __name__ == "__main__":
+    asyncio.run(main())

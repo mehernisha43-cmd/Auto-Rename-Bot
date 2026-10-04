@@ -1,10 +1,11 @@
 from aiohttp import web
 
+
 routes = web.RouteTableDef()
 
 @routes.get("/", allow_head=True)
 async def root_route_handler(request):
-    return web.json_response("Madflix_Bots")
+    return web.json_response("# -- https://t.me/ANIFLIXANIMETAMIL -- ## -- ANIFLIX Auto Rename Bot -- #")
 
 
 async def web_server():
@@ -14,7 +15,5 @@ async def web_server():
 
 
 
-# Jishu Developer 
-# Don't Remove Credit 🥺
-# Telegram Channel @Madflix_Bots
-# Developer @JishuDeveloper
+          # -- https://t.me/ANIFLIXANIMETAMIL -- #
+# -- ANIFLIX Auto Rename Bot -- #

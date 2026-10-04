@@ -1,9 +1,9 @@
 {
     "name": "Auto Renamer Bot",
     "description": "Telegram Auto File Renamer Bot ",
-    "logo": "https://graph.org/file/2f461540c83b362772714.jpg",
+    "logo": "https://graph.org/file/b3125068739885e7109db.jpg",
     "keywords": ["Auto Renamer Bot", "Mongo DB"],    
-    "repository": "https://github.com/JishuDeveloper/Auto-Rename-Bot",
+    "repository": "https://github.com/",
     "env": {
         "API_ID": {
             "description": "Your APP ID From my.telegram.org ",
@@ -17,7 +17,7 @@
             "description": "if your server is need web service! value = True else value = False",
             "value": "False"
         },
-        "FORCE_SUB": {
+        "FORCE_SUB_CHANNELS": {
             "description": "Your force sub channel user name without [@] ",
             "value": "",
             "required": false 

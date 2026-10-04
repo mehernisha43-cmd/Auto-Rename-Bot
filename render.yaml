@@ -1,11 +1,11 @@
 services:
   - type: web
     plan: free
-    name: auto-rename-bot
+    name: ANIFLIX Auto Rename Bot
     env: python
     buildCommand: pip install -r requirements.txt
-    startCommand: python bot.py
-    repo: https://github.com/jishudeveloper/Auto-Rename-Bot.git
+    startCommand: python3 bot.py
+    repo: 
     branch: main
     autoDeploy: false
     envVars:
@@ -15,7 +15,7 @@ services:
         sync: false
       - key: API_HASH
         sync: false
-      - key: FORCE_SUB
+      - key: FORCE_SUB_CHANNELS
         sync: false
       - key: LOG_CHANNEL
         sync: false
