@@ -1,19 +1,24 @@
-import re, os, time
-id_pattern = re.compile(r'^.\d+$') 
+import re
+import os
+import time
+
+id_pattern = re.compile(r'^.\d+$')
+
 
 class Config(object):
-    # pyro client config
-    API_ID    = int(os.environ.get("API_ID", "0") or "0")
-    API_HASH  = os.environ.get("API_HASH", "")
-    BOT_TOKEN = os.environ.get("BOT_TOKEN", "") 
+    # Pyrogram client config
+    API_ID = int(os.environ.get("API_ID", "0") or "0")
+    API_HASH = os.environ.get("API_HASH", "")
+    BOT_TOKEN = os.environ.get("BOT_TOKEN", "")
 
-    # database config
-    DB_NAME = os.environ.get("DB_NAME", "autorename")     
-    DB_URL  = os.environ.get("DB_URL","")
- 
-    # other configs
-    BOT_UPTIME  = time.time()
-    START_PIC   = os.environ.get("START_PIC", "")
+    # Database config
+    DB_NAME = os.environ.get("DB_NAME", "autorename")
+    DB_URL = os.environ.get("DB_URL", "")
+
+    # Other configs
+    BOT_UPTIME = time.time()
+    START_PIC = os.environ.get("START_PIC", "")
+
     ADMIN = []
     for admin in re.split(r"[\s,]+", os.environ.get("ADMIN", "").strip()):
         if admin:
@@ -21,21 +26,34 @@ class Config(object):
                 ADMIN.append(int(admin))
             except ValueError:
                 ADMIN.append(admin.lstrip("@"))
-    # -- FORCE_SUB_CHANNELS = ["BotzPW","AshuSupport","AshutoshGoswami24"] -- # 
-    FORCE_SUB_CHANNELS = [
-        x.strip().lstrip('@') for x in (
-            os.environ.get('FORCE_SUB_CHANNELS') or os.environ.get('FORCE_SUB') or ''
-        ).split(',') if x.strip()
-    ]
-    LOG_CHANNEL = int(os.environ.get("LOG_CHANNEL", "0") or "0")
-    PORT = int(os.environ.get("PORT", "8080") or "8080")
-    
-    # wes response configuration     
-    WEBHOOK = os.environ.get("WEBHOOK", "True").strip().lower() in {"1", "true", "yes", "on"}
 
+    # Force Subscribe
+    FORCE_SUB_CHANNELS = [
+        x.strip().lstrip("@")
+        for x in (
+            os.environ.get("FORCE_SUB_CHANNELS")
+            or os.environ.get("FORCE_SUB")
+            or ""
+        ).split(",")
+        if x.strip()
+    ]
+
+    # Log channel
+    LOG_CHANNEL = int(os.environ.get("LOG_CHANNEL", "0") or "0")
+
+    # Web server
+    PORT = int(os.environ.get("PORT", "8080") or "8080")
+
+    WEBHOOK = (
+        os.environ.get("WEBHOOK", "True")
+        .strip()
+        .lower()
+        in {"1", "true", "yes", "on"}
+    )
 
 
 class Txt(object):
+
     START_TXT = """👋 Hello {}!
 
 ➻ Advanced Auto Rename Bot
@@ -55,9 +73,11 @@ Use These Keywords To Setup Custom File Name
 ✓ `{{episode}}` :- Episode number
 ✓ `{{quality}}` :- Video resolution
 
-<b>➻ Example :</b> <code>/autorename {{title}} S{{season}} Ep{{episode}} [{{quality}}] [TAMIL]</code>
+<b>➻ Example :</b>
+<code>/autorename {{title}} S{{season}} Ep{{episode}} [{{quality}}] [TAMIL]</code>
 
-<b>➻ Your Current Auto Rename Format :</b> <code>{format_template}</code>"""
+<b>➻ Your Current Auto Rename Format :</b>
+<code>{format_template}</code>"""
 
     ABOUT_TXT = """<b>🤖 My Name :</b> ANIFLIX RENAME BOT ⚡
 <b>📝 Language :</b> Python 3
@@ -67,6 +87,23 @@ Use These Keywords To Setup Custom File Name
 <b>🧑‍💻 Developer :</b> @TANJIROKAMADO404
 
 <b>♻️ Bot Made By :</b> @TANJIROKAMADO404"""
+
+    # Metadata
+    META_TXT = """<b>🎬 HOW TO SET METADATA</b>
+
+Use these commands to set your metadata:
+
+➻ /settitle - Set video title
+➻ /setauthor - Set author
+➻ /setartist - Set artist
+➻ /setaudio - Set audio title
+➻ /setsubtitle - Set subtitle title
+➻ /setvideo - Set video title
+
+Example:
+<code>/settitle Naruto Shippuden</code>
+
+After setting the metadata, use /metadata to turn metadata On or Off."""
 
     SEND_METADATA = "<b>Send the metadata text you want to use.</b>"
 
@@ -101,5 +138,14 @@ For any issues with the bot, contact the developer.
     HELP_TXT = """<b>Hey</b> {} 👋
 
 Use the buttons below to configure your Auto Rename Bot.
+
+⚙️ <b>Metadata</b>
+/metadata - Manage media metadata
+/settitle - Set video title
+/setauthor - Set author
+/setartist - Set artist
+/setaudio - Set audio title
+/setsubtitle - Set subtitle
+/setvideo - Set video metadata
 
 ⚠️ For any issues, contact @TANJIROKAMADO404"""
