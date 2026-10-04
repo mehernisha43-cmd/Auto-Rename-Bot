@@ -23,10 +23,9 @@ class Config(object):
                 ADMIN.append(admin.lstrip("@"))
     # -- FORCE_SUB_CHANNELS = ["BotzPW","AshuSupport","AshutoshGoswami24"] -- # 
     FORCE_SUB_CHANNELS = [
-        x.strip() for x in os.environ.get(
-            "FORCE_SUB_CHANNELS",
-            "@Tamil_Anime_Dubbing,@ANIFLIXANIMETAMIL,@Tamil_Animeindex"
-        ).split(",") if x.strip()
+        x.strip().lstrip('@') for x in (
+            os.environ.get('FORCE_SUB_CHANNELS') or os.environ.get('FORCE_SUB') or ''
+        ).split(',') if x.strip()
     ]
     LOG_CHANNEL = int(os.environ.get("LOG_CHANNEL", "0") or "0")
     PORT = int(os.environ.get("PORT", "8080") or "8080")
@@ -51,12 +50,12 @@ class Txt(object):
 
 Use These Keywords To Setup Custom File Name
 
-✓ `{title}` :- Anime / Movie title
-✓ `{season}` :- Season number
-✓ `{episode}` :- Episode number
-✓ `{quality}` :- Video resolution
+✓ `{{title}}` :- Anime / Movie title
+✓ `{{season}}` :- Season number
+✓ `{{episode}}` :- Episode number
+✓ `{{quality}}` :- Video resolution
 
-<b>➻ Example :</b> <code>/autorename {title} S{season} Ep{episode} [{quality}] [TAMIL]</code>
+<b>➻ Example :</b> <code>/autorename {{title}} S{{season}} Ep{{episode}} [{{quality}}] [TAMIL]</code>
 
 <b>➻ Your Current Auto Rename Format :</b> <code>{format_template}</code>"""
 
