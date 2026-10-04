@@ -22,7 +22,12 @@ class Config(object):
             except ValueError:
                 ADMIN.append(admin.lstrip("@"))
     # -- FORCE_SUB_CHANNELS = ["BotzPW","AshuSupport","AshutoshGoswami24"] -- # 
-    FORCE_SUB_CHANNELS = [x.strip() for x in os.environ.get('FORCE_SUB_CHANNELS', '').split(',') if x.strip()]
+    FORCE_SUB_CHANNELS = [
+        x.strip() for x in os.environ.get(
+            "FORCE_SUB_CHANNELS",
+            "@Tamil_Anime_Dubbing,@ANIFLIXANIMETAMIL,@Tamil_Animeindex"
+        ).split(",") if x.strip()
+    ]
     LOG_CHANNEL = int(os.environ.get("LOG_CHANNEL", "0") or "0")
     PORT = int(os.environ.get("PORT", "8080") or "8080")
     
